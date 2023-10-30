@@ -2,23 +2,43 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
+use App\Http\Requests\Api\CreateUserRequest;
+use App\Http\Requests\Api\LoginRequest;
 use App\Services\AuthenticationService;
-use Faker\Provider\Base;
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
-class RegisterController extends BaseController
+class AuthenticationController extends BaseController
 {
     public AuthenticationService $authenticationService;
 
-    public function __con
-
-    public function register(){
-
-        $user =
+    public function __construct(AuthenticationService $authenticationService){
+        $this->authenticationService = $authenticationService;
     }
 
-    public function login(){
+    public function register(CreateUserRequest $createUserRequest){
 
+        $user = $this->authenticationService->createUser($createUserRequest->all());
+        $data['user'] = $user;
+        $data['token'] = $user->createToken('my-token')->plainTextToken;
+
+        return $this->sendResponse($data);
+    }
+
+    public function login(LoginRequest $loginRequest){
+        if (Auth::attempt(['email'=>$loginRequest->all()['email'], 'password'=>$loginRequest->all()['password']])){
+            $data['user'] = Auth::user();
+            $data['token'] = Auth::user()->createToken('my-token')->plainTextToken;
+
+            return $this->sendResponse($data);
+        }
+        else{
+            return $this->sendResponse('Failure', 'faild', 401);
+        }
+    }
+
+    public function logout(){
+        Auth::user()->tokens()->delete();
+
+        return $this->sendResponse('');
     }
 }
