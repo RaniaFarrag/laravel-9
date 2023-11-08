@@ -28,7 +28,7 @@ Route::controller(AuthenticationController::class)->group(function (){
 
 });
 
-Route::middleware('auth:sanctum')->group(function (){
+Route::middleware(['auth:sanctum', 'checkinternet.connection'])->group(function (){
    Route::resource('products', ProductController::class);
 });
 
