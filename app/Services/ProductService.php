@@ -5,7 +5,9 @@ namespace App\Services;
 
 //This is Service Container
 
+use App\Events\NewProductCreatedEvent;
 use App\Models\Product;
+use Symfony\Contracts\EventDispatcher\Event;
 
 class ProductService
 {
@@ -25,6 +27,7 @@ class ProductService
         $product = Product::create($requestData);
         $product->productDetails()->create($requestData);
 
+        event(new NewProductCreatedEvent($product));
         return $product;
 
     }
