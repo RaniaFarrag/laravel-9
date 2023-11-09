@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\AuthenticationController;
+use App\Http\Controllers\Api\EmailController;
 use App\Http\Controllers\Api\ProductController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -30,6 +31,7 @@ Route::controller(AuthenticationController::class)->group(function (){
 
 Route::middleware(['auth:sanctum', 'checkinternet.connection'])->group(function (){
    Route::resource('products', ProductController::class);
+   Route::get('send/email', [EmailController::class, 'sendWelcomeEmail']);
 });
 
 
