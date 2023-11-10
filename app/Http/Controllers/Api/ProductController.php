@@ -2,13 +2,17 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Exports\ProductExport;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\Product\CreateProductRequest;
+use App\Http\Requests\Api\Product\ImportProductExcelRequest;
 use App\Http\Requests\Api\Product\UpdateProductRequest;
+use App\Imports\ProductImport;
 use App\Models\Product;
 use App\Services\ProductService;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+//use Maatwebsite\Excel\Excel;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ProductController extends BaseController
 {
@@ -18,7 +22,7 @@ class ProductController extends BaseController
      * @return \Illuminate\Http\Response
      */
 
-    public ProductService $productService;
+    public  $productService;
 
     public function __construct(ProductService $productService){
         $this->productService = $productService;
@@ -104,5 +108,20 @@ class ProductController extends BaseController
         $this->productService->deleteProduct($product);
 
         return $this->sendResponse('deleted successfully');
+    }
+
+
+    public function export()
+    {
+        return Excel::download(new ProductExport(), 'product-excel.xlsx');
+    }
+
+
+    public function import(ImportProductExcelRequest $importProductExcelRequest)
+    {
+        Excel::import(new ProductImport(), $importProductExcelRequest->file('file'));
+
+        return $this->sendResponse('Imported successfully');
+
     }
 }

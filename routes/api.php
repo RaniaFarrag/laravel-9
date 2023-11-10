@@ -32,7 +32,14 @@ Route::controller(AuthenticationController::class)->group(function (){
 Route::middleware(['auth:sanctum', 'checkinternet.connection'])->group(function (){
    Route::resource('products', ProductController::class);
    Route::get('send/email', [EmailController::class, 'sendWelcomeEmail']);
+
+//   Route::get('export', [ProductController::class, 'export']);
+    Route::post('/import', [ProductController::class, 'import']);
+
 });
+//to test from browser
+Route::get('/export', [ProductController::class, 'export']);
+
 
 
 
