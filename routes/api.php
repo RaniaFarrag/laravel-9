@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\AuthenticationController;
 use App\Http\Controllers\Api\EmailController;
 use App\Http\Controllers\Api\ProductController;
+use App\Http\Controllers\ThirdPartyApi\ThirdPartyController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -39,6 +40,8 @@ Route::middleware(['auth:sanctum', 'checkinternet.connection'])->group(function 
 });
 //to test from browser
 Route::get('/export', [ProductController::class, 'export']);
+
+Route::get('third/party', [ThirdPartyController::class, 'getDataFromExternalApi']);
 
 
 
