@@ -27,7 +27,7 @@ class ProductService
         $product = Product::create($requestData);
         $product->productDetails()->create($requestData);
 
-        event(new NewProductCreatedEvent($product));
+        //event(new NewProductCreatedEvent($product));
         return $product;
 
     }

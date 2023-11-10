@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Auth;
 
 class AuthenticationController extends BaseController
 {
-    public AuthenticationService $authenticationService;
+    public $authenticationService;
 
     public function __construct(AuthenticationService $authenticationService){
         $this->authenticationService = $authenticationService;
